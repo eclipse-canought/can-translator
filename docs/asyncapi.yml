@@ -1,0 +1,2003 @@
+asyncapi: 3.0.0
+info:
+  title: CAN Translator API
+  version: v1.0.0
+  description: >
+    The Canought CAN Translator API allows you to get UDS/J1939 request/response
+    transmission over mqtt
+  license:
+    name: EPL-2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+  engineering:
+    host: 'mosquitto:{port}'
+    protocol: mqtt
+    description: Eclipse Mosquitto Broker
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 8883.
+        default: '1883'
+        enum:
+          - '1883'
+          - '8883'
+channels:
+  diagstack/request/getclaimedaddress:
+    address: diagstack/request/getclaimedaddress
+    messages:
+      publish.message:
+        $ref: '#/components/messages/getclaimedaddress'
+    description: The topic used to get the claimed address for the ecu connection
+  diagstack/response/getclaimedaddress:
+    address: diagstack/response/getclaimedaddress
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/getClaimedAddress'
+    description: The topic used where response for getclaimedaddress is published
+  diagstack/request/setconfigparameters:
+    address: diagstack/request/setconfigparameters
+    messages:
+      publish.message:
+        $ref: '#/components/messages/setconfigparameters'
+    description: The topic on which request is sent to set comParams
+  diagstack/response/setconfigparameters:
+    address: diagstack/response/setconfigparameters
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/setConfigParameters'
+    description: The topic on which response is sent for set comParams request
+  diagstack/request/opencommchannel:
+    address: diagstack/request/opencommchannel
+    messages:
+      publish.message:
+        $ref: '#/components/messages/opencommchannel'
+    description: >-
+      The topic used to open a connection with ECU or to get the connectionID to
+      already opened connection.
+  diagstack/response/opencommchannel:
+    address: diagstack/response/opencommchannel
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/openCommchannel'
+    description: The topic on which response of opencommchannel is published
+  diagstack/request/readpgns:
+    address: diagstack/request/readpgns
+    messages:
+      publish.message:
+        $ref: '#/components/messages/readpgns'
+    description: >-
+      The topic on which request is sent to request PGN and SPN values
+  diagstack/response/readpgns:
+    address: diagstack/response/readpgns
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/readPgns'
+    description: The topic on which response is sent for readpgns request
+  diagstack/request/executepgnmonitoring:
+    address: diagstack/request/executepgnmonitoring
+    messages:
+      publish.message:
+        $ref: '#/components/messages/executepgnmonitoring'
+    description: >-
+      The topic on which request is sent for monitoring PGNs
+  diagstack/response/executepgnmonitoring:
+    address: diagstack/response/executepgnmonitoring
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/executepgnMonitoring'
+    description: The topic on which response is sent for executepgnmonitoring request
+  diagstack/request/selectmonitoringpgns:
+    address: diagstack/request/selectmonitoringpgns
+    messages:
+      publish.message:
+        $ref: '#/components/messages/selectmonitoringpgns'
+    description: >-
+      The topic on which request is sent for selecting PGN's in executepgnmonitoring
+  diagstack/response/selectmonitoringpgns:
+    address: diagstack/response/selectmonitoringpgns
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/selectMonitoringPgns'
+    description: The topic on which response is sent for selectmonitoringpgns request
+  diagstack/response/getupdatedpgnvalues:
+    address: diagstack/response/getupdatedpgnvalues
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/getupdatedpgnvalues'
+    description: The topic on which response is for updated PGN values
+  diagstack/request/readdatabyidentifier:
+    address: diagstack/request/readdatabyidentifier
+    messages:
+      publish.message:
+        $ref: '#/components/messages/readdatabyidentifier'
+    description: The topic on which request to read DID is sent by the client application
+  diagstack/response/readdatabyidentifier:
+    address: diagstack/response/readdatabyidentifier
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/readdatabyIdentifier'
+    description: The topic on which response of readdatabyIdentifier is received
+  diagstack/request/closecommchannel:
+    address: diagstack/request/closecommchannel
+    messages:
+      publish.message:
+        $ref: '#/components/messages/closecommchannel'
+    description: >-
+      The topic on which request is sent by the client to close the connection
+  diagstack/response/closecommchannel:
+    address: diagstack/response/closecommchannel
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/closeCommChannel'
+    description: The topic on which response for closecommchannel request is to be received
+  diagstack/request/writedatabyidentifier:
+    address: diagstack/request/writedatabyidentifier
+    messages:
+      publish.message:
+        $ref: '#/components/messages/writedatabyidentifier'
+    description: 'The topic on which request is sent by the client application to write data'
+  diagstack/response/writedatabyidentifier:
+    address: diagstack/response/writedatabyidentifier
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/writeDatabyIdentifier'
+    description: 'The topic on which response is sent by the client application for write request'
+  diagstack/request/readdtc:
+    address: diagstack/request/readdtc
+    messages:
+      publish.message:
+        $ref: '#/components/messages/readdtc'
+    description: 'The topic on which request is sent for reading Diagnostic Trouble Code'
+  diagstack/response/readdtc:
+    address: diagstack/response/readdtc
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/readDtc'
+    description: 'The topic on which response is sent for reading Diagnostic Trouble Code'
+  diagstack/request/cleardtcs:
+    address: diagstack/request/cleardtcs
+    messages:
+      publish.message:
+        $ref: '#/components/messages/cleardtcs'
+    description: 'The topic on which request is sent for clearing diagnostic information'
+  diagstack/response/cleardtcs:
+    address: diagstack/response/cleardtcs
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/clearDtcs'
+    description: 'The topic on which response is sent for clearing diagnostic information'
+  diagstack/request/readfreezeframes:
+    address: diagstack/request/readfreezeframes
+    messages:
+      publish.message:
+        $ref: '#/components/messages/readfreezeframes'
+    description: 'The topic on which request is sent for reading dtc stored record'
+  diagstack/response/readfreezeframes:
+    address: diagstack/response/readfreezeframes
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/readFreezeFrames'
+    description: 'The topic on which response for readfreezeframes request is published'
+  diagstack/request/routinecontrol:
+    address: diagstack/request/routinecontrol
+    messages:
+      publish.message:
+        $ref: '#/components/messages/routinecontrol'
+    description: 'The topic on which routine control request is sent to execute defined sequence of steps'
+  diagstack/response/routinecontrol:
+    address: diagstack/response/routinecontrol
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/routineControl'
+    description: 'The topic on which response is sent for routine control request'
+  diagstack/request/diagnosticsessioncontrol:
+    address: diagstack/request/diagnosticsessioncontrol
+    messages:
+      publish.message:
+        $ref: '#/components/messages/diagnosticsessioncontrol'
+    description: 'The topic on which request is sent to enable different diagnostic session'
+  diagstack/response/diagnosticsessioncontrol:
+    address: diagstack/response/diagnosticsessioncontrol
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/diagnosticSessionControl'
+    description: 'The topic on which response is sent for diagnosticsessioncontrol request' 
+  diagstack/request/communicationcontrol:
+    address: diagstack/request/communicationcontrol
+    messages:
+      publish.message:
+        $ref: '#/components/messages/communicationcontrol'
+    description: 'The topic on which request is sent to switch transmission or reception of messages'
+  diagstack/response/communicationcontrol:
+    address: diagstack/response/communicationcontrol
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/communicationControl'
+    description: 'The topic on which response is sent for communicationcontrol request'
+  diagstack/request/sendtesterpresent:
+    address: diagstack/request/sendtesterpresent
+    messages:
+      publish.message:
+        $ref: '#/components/messages/sendtesterpresent'
+    description: 'The topic on which request is sent to keep diagnostic services active'
+  diagstack/response/sendtesterpresent:
+    address: diagstack/response/sendtesterpresent
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/sendTesterPresent'
+    description: 'The topic on which response is sent for sendtesterpresent request'
+  diagstack/request/requestdownload:
+    address: diagstack/request/requestdownload
+    messages:
+      publish.message:
+        $ref: '#/components/messages/requestdownload'
+    description: 'The topic on which data transfer is requested'
+  diagstack/response/requestdownload:
+    address: diagstack/response/requestdownload
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/requestDownload'
+    description: 'The topic on which response is sent for requestdownload request'
+  diagstack/request/transferdata:
+    address: diagstack/request/transferdata
+    messages:
+      publish.message:
+        $ref: '#/components/messages/transferdata'
+    description: 'Topic is used to request transfer of data to the ECU'
+  diagstack/response/transferdata:
+    address: diagstack/response/transferdata
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/transferData'
+    description: 'The topic on which response is sent for transferdata request'
+  diagstack/request/requesttransferexit:
+    address: diagstack/request/requesttransferexit
+    messages:
+      publish.message:
+        $ref: '#/components/messages/requesttransferexit'
+    description: 'Topic is used to request termination of data transfer'
+  diagstack/response/requesttransferexit:
+    address: diagstack/response/requesttransferexit
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/requestTransferExit'
+    description: 'The topic on which response is sent for requesttransferexit request' 
+operations:
+  diagstack/request/getclaimedaddress.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1getclaimedaddress'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1getclaimedaddress/messages/publish.message
+  diagstack/response/getclaimedaddress.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1getclaimedaddress'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1getclaimedaddress/messages/subscribe.message
+  diagstack/request/setconfigparameters.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1setconfigparameters'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1setconfigparameters/messages/publish.message
+  diagstack/response/setconfigparameters.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1setconfigparameters'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1setconfigparameters/messages/subscribe.message
+  diagstack/request/opencommchannel.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1opencommchannel'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1opencommchannel/messages/publish.message
+  diagstack/response/opencommchannel.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1opencommchannel'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1opencommchannel/messages/subscribe.message
+  diagstack/request/readpgns.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1readpgns'
+    messages:
+      - $ref: '#/channels/diagstack~1request~1readpgns/messages/publish.message'
+  diagstack/response/readpgns.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1readpgns'
+    messages:
+      - $ref: '#/channels/diagstack~1response~1readpgns/messages/subscribe.message'
+  diagstack/request/executepgnmonitoring.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1executepgnmonitoring'
+    messages:
+      - $ref: '#/channels/diagstack~1request~1executepgnmonitoring/messages/publish.message'
+  diagstack/response/executepgnmonitoring.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1executepgnmonitoring'
+    messages:
+      - $ref: '#/channels/diagstack~1response~1executepgnmonitoring/messages/subscribe.message'
+  diagstack/request/selectmonitoringpgns.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1selectmonitoringpgns'
+    messages:
+      - $ref: '#/channels/diagstack~1request~1selectmonitoringpgns/messages/publish.message'
+  diagstack/response/selectmonitoringpgns.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1selectmonitoringpgns'
+    messages:
+      - $ref: '#/channels/diagstack~1response~1selectmonitoringpgns/messages/subscribe.message'
+  diagstack/response/getupdatedpgnvaluess.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1getupdatedpgnvalues'
+    messages:
+      - $ref: '#/channels/diagstack~1response~1getupdatedpgnvalues/messages/subscribe.message'
+  diagstack/request/readdatabyidentifier.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1readdatabyidentifier'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1readdatabyidentifier/messages/publish.message
+  diagstack/response/readdatabyidentifier.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1readdatabyidentifier'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1readdatabyidentifier/messages/subscribe.message
+  diagstack/request/closecommchannel.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1closecommchannel'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1closecommchannel/messages/publish.message
+  diagstack/response/closecommchannel.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1closecommchannel'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1closecommchannel/messages/subscribe.message
+  diagstack/request/writedatabyidentifier.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1writedatabyidentifier'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1writedatabyidentifier/messages/publish.message
+  diagstack/response/writedatabyidentifier.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1writedatabyidentifier'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1writedatabyidentifier/messages/subscribe.message
+  diagstack/request/readdtc.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1readdtc'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1readdtc/messages/publish.message
+  diagstack/response/readdtc.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1readdtc'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1readdtc/messages/subscribe.message
+  diagstack/request/cleardtcs.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1cleardtcs'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1cleardtcs/messages/publish.message
+  diagstack/response/cleardtcs.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1cleardtcs'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1cleardtcs/messages/subscribe.message
+  diagstack/request/readfreezeframes.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1readfreezeframes'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1readfreezeframes/messages/publish.message
+  diagstack/response/readfreezeframes.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1readfreezeframes'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1readfreezeframes/messages/subscribe.message
+  diagstack/request/routinecontrol.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1routinecontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1routinecontrol/messages/publish.message
+  diagstack/response/routinecontrol.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1routinecontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1routinecontrol/messages/subscribe.message
+  diagstack/request/diagnosticsessioncontrol.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1diagnosticsessioncontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1diagnosticsessioncontrol/messages/publish.message
+  diagstack/response/diagnosticsessioncontrol.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1diagnosticsessioncontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1diagnosticsessioncontrol/messages/subscribe.message
+  diagstack/request/communicationcontrol.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1communicationcontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1communicationcontrol/messages/publish.message
+  diagstack/response/communicationcontrol.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1communicationcontrol'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1communicationcontrol/messages/subscribe.message
+  diagstack/request/sendtesterpresent.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1sendtesterpresent'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1sendtesterpresent/messages/publish.message
+  diagstack/response/sendtesterpresent.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1sendtesterpresent'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1sendtesterpresent/messages/subscribe.message
+  diagstack/request/requestdownload.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1requestdownload'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1requestdownload/messages/publish.message
+  diagstack/response/requestdownload.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1requestdownload'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1requestdownload/messages/subscribe.message
+  diagstack/request/transferdata.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1transferdata'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1transferdata/messages/publish.message
+  diagstack/response/transferdata.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1transferdata'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1transferdata/messages/subscribe.message
+  diagstack/request/requesttransferexit.publish:
+    action: send
+    channel:
+      $ref: '#/channels/diagstack~1request~1requesttransferexit'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1request~1requesttransferexit/messages/publish.message
+  diagstack/response/requesttransferexit.subscribe:
+    action: receive
+    channel:
+      $ref: '#/channels/diagstack~1response~1requesttransferexit'
+    messages:
+      - $ref: >-
+          #/channels/diagstack~1response~1requesttransferexit/messages/subscribe.message
+components:
+  messages:
+    getclaimedaddress:
+      title: Request for getclaimedaddress is published
+      contentType: application/json
+      summary: The topic used to get the claimed address for the ecu connection
+      payload:
+        $ref: '#/components/schemas/getclaimedaddress'
+    getClaimedAddress:
+      title: Response for getclaimedaddress is received
+      contentType: application/json
+      summary: >-
+        The topic used to get the claimed address response for the ecu
+        connection
+      payload:
+        $ref: '#/components/schemas/getClaimedAddress'
+    setconfigparameters:
+      title: Request is sent to set comParams
+      contentType: application/json
+      summary: The topic on which request is sent to set comParams
+      payload:
+        $ref: '#/components/schemas/setconfigparameters'
+    setConfigParameters:
+      title: Response is received for the config paramters
+      contentType: application/json
+      summary: The topic on which response is sent to set comParams
+      payload:
+        $ref: '#/components/schemas/setConfigParameters'
+    opencommchannel:
+      title: Open a connection with ECU
+      contentType: application/json
+      summary: >-
+        The topic used to open a connection with ECU or to get the connectionID
+        to already opened connection
+      payload:
+        $ref: '#/components/schemas/opencommchannel'
+    openCommchannel:
+      title: open a connection with a specified ECU
+      contentType: application/json
+      summary: The topic on which response of opencommchannel is published
+      payload:
+        $ref: '#/components/schemas/openCommchannel'
+    readpgns:
+      title: To send the request by the client application
+      contentType: application/json
+      summary: >-
+        The topic on which request is sent to request PGN and SPN values
+      payload:
+        $ref: '#/components/schemas/readpgns'
+    readPgns:
+      title: To receive the response for readpgns request
+      contentType: application/json
+      summary: To receive the response for readpgns request
+      payload:
+        $ref: '#/components/schemas/readPgns'
+    executepgnmonitoring:
+      title: Request for monitoring PGNs
+      contentType: application/json
+      summary: >-
+        executepgnmonitoring service is used to start/stop PGN monitoring
+      payload:
+        $ref: '#/components/schemas/executepgnmonitoring'
+    executepgnMonitoring:
+      title: Response for monitoring PGNs request
+      contentType: application/json
+      summary: executepgnmonitoring service is used for start/stop for PGN monitoring
+      payload:
+        $ref: '#/components/schemas/executepgnMonitoring'
+    selectmonitoringpgns:
+      title: Request for monitoring PGNs
+      contentType: application/json
+      summary: >-
+        selectmonitoringpgns is used to select PGN's for executepgnmonitoring operation 
+      payload:
+        $ref: '#/components/schemas/selectmonitoringpgns'
+    selectMonitoringPgns:
+      title: Response for monitoring PGNs request
+      contentType: application/json
+      summary: selectmonitoringpgns is used to select PGN's for executepgnmonitoring operation
+      payload:
+        $ref: '#/components/schemas/selectMonitoringPgns'
+    getupdatedpgnvalues:
+      title: Response for getting SPN values for selected PGN
+      contentType: application/json
+      summary: getupdatedpgnvalues is used for getting updated SPN values for selected PGN
+      payload:
+        $ref: '#/components/schemas/getupdatedpgnvalues'
+    readdatabyidentifier:
+      title: To send the request by the client application
+      contentType: application/json
+      summary: >-
+        The topic on which request is sent by the client application with
+        required payload
+      payload:
+        $ref: '#/components/schemas/readdatabyidentifier'
+    readdatabyIdentifier:
+      title: To receive the response by the communication library
+      contentType: application/json
+      summary: 'The topic on which the response is being sent '
+      payload:
+        $ref: '#/components/schemas/readdatabyIdentifier'
+    closecommchannel:
+      title: Send request by the client application
+      contentType: application/json
+      summary: >-
+        The topic on which request is sent by the client application to close the connection
+      payload:
+        $ref: '#/components/schemas/closecommchannel'
+    closeCommChannel:
+      title: Receives response from the communication library client
+      contentType: application/json
+      summary: 'The topic on which response is being sent '
+      payload:
+        $ref: '#/components/schemas/closeCommChannel'
+    writedatabyidentifier:
+      title: Request to write information
+      contentType: application/json
+      summary: The topic on which request is being sent to ECU
+      payload:
+        $ref: '#/components/schemas/writedatabyidentifier'
+    writeDatabyIdentifier:
+      title: Response to write information
+      contentType: application/json
+      summary: The topic on which request is being sent to ECU
+      payload:
+        $ref: '#/components/schemas/writeDatabyIdentifier'
+    readdtc:
+      title: Request to read dtc
+      contentType: application/json
+      summary: The topic on which request is being sent to ECU
+      payload:
+        $ref: '#/components/schemas/readdtc'
+    readDtc:
+      title: Response to read dtc
+      contentType: application/json
+      summary: The topic on which response is received
+      payload:
+        $ref: '#/components/schemas/readDtc'
+    cleardtcs:
+      title: Request to clear diagnostic information
+      contentType: application/json
+      summary: The topic on which request is being sent to ECU
+      payload:
+        $ref: '#/components/schemas/cleardtcs'
+    clearDtcs:
+      title: Response to read dtc
+      contentType: application/json
+      summary: The topic on which response is received
+      payload:
+        $ref: '#/components/schemas/clearDtcs'
+    readfreezeframes:
+      title: Request to stored record of the DTC
+      contentType: application/json
+      summary: The topic on which request is being sent to read DTC stored record
+      payload:
+        $ref: '#/components/schemas/readfreezeframes'
+    readFreezeFrames:
+      title: Response to read DTC stored record
+      contentType: application/json
+      summary: The topic on which response is received
+      payload:
+        $ref: '#/components/schemas/readFreezeFrames'
+    routinecontrol:
+      title: Request to execute a defined sequence of steps
+      contentType: application/json
+      summary: The topic on which request is being sent to execute routine control
+      payload:
+        $ref: '#/components/schemas/routinecontrol'
+    routineControl:
+      title: Response for routine control request 
+      contentType: application/json
+      summary: The topic on which response for routine control request is received
+      payload:
+        $ref: '#/components/schemas/routineControl'
+    diagnosticsessioncontrol:
+      title: Request to enable different diagnostic session
+      contentType: application/json
+      summary: The topic on which request is being sent to enable diagnostic session
+      payload:
+        $ref: '#/components/schemas/diagnosticsessioncontrol'
+    diagnosticSessionControl:
+      title: Response for diagnostic session control request 
+      contentType: application/json
+      summary: The topic on which response for diagnostic session control request is received
+      payload:
+        $ref: '#/components/schemas/diagnosticSessionControl'
+    communicationcontrol:
+      title: Request to switch on/off transmission and reception of message
+      contentType: application/json
+      summary: Ability to control communication with the ECU
+      payload:
+        $ref: '#/components/schemas/communicationcontrol'
+    communicationControl:
+      title: Response for communication control request 
+      contentType: application/json
+      summary: The topic on which response for communication control request is received
+      payload:
+        $ref: '#/components/schemas/communicationControl'
+    sendtesterpresent:
+      title: Request to keep diagnostic service active
+      contentType: application/json
+      summary: Ability to keep client connection and services active
+      payload:
+        $ref: '#/components/schemas/sendtesterpresent'
+    sendTesterPresent:
+      title: Response for send tester present request 
+      contentType: application/json
+      summary: Ability to keep client connection and services active
+      payload:
+        $ref: '#/components/schemas/sendTesterPresent'
+    requestdownload:
+      title: Service is used to initiate download
+      contentType: application/json
+      summary: Ability to initiate data transfer
+      payload:
+        $ref: '#/components/schemas/requestdownload'
+    requestDownload:
+      title: Response for download request 
+      contentType: application/json
+      summary: Ability to initiate data transfer
+      payload:
+        $ref: '#/components/schemas/requestDownload'
+    transferdata:
+      title: Service is used to initiate data transfer to ECU
+      contentType: application/json
+      summary: Ability to initiate data transfer
+      payload:
+        $ref: '#/components/schemas/transferdata'
+    transferData:
+      title: Response for transferdata request 
+      contentType: application/json
+      summary: Ability to initiate data transfer
+      payload:
+        $ref: '#/components/schemas/transferData'
+    requesttransferexit:
+      title: Service is used to terminate the transfer of data
+      contentType: application/json
+      summary: Ability to terminate the transfer of data
+      payload:
+        $ref: '#/components/schemas/requesttransferexit'
+    requestTransferExit:
+      title: Response for requesttransferexit request 
+      contentType: application/json
+      summary: Ability to terminate the transfer of data
+      payload:
+        $ref: '#/components/schemas/requestTransferExit'
+  schemas:
+    getclaimedaddress:
+      type: object
+      description: >-
+        This schema represents that Service API  get the claimed address for the
+        ecu connection
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+      required:
+        - appID
+        - sequenceNo
+    getClaimedAddress:
+      type: object
+      description: >-
+        This schema represents that Service API  get the claimed address
+        response for the ecu connection
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        claimedAddress:
+          description: >-
+            claimed address from the preferred addresses mentioned in
+            configinfo.json file
+          type: string
+        responseCode:
+          description: Response code for the request
+          type: string
+      required:
+        - appID
+        - sequenceNo
+        - claimedAddress
+        - responseCode
+    setconfigparameters:
+      type: object
+      description: This schema represents that Service API to set comParams
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU
+          type: string
+        comParams:
+          type: array
+          items:
+            description: >-
+              Each object in this array consists of an configParamName and
+              configParamData.
+            type: object
+            properties:
+              configParamName:
+                description: Config parameter name.
+                type: string
+              configParamData:
+                description: Config parameter data.
+                type: string
+            required:
+              - configParamName
+              - configParamData
+      required:
+        - appID
+        - sequenceNo
+        - connectionID
+        - comParams
+    setConfigParameters:
+      type: object
+      description: This schema represents response of setconfigparameters API
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU
+          type: string
+        data:
+          type: array
+          items:
+            description: data array with result of ComParam request
+            type: object
+            properties:
+              configParamName:
+                description: Config parameter name.
+                type: string
+              responseCode:
+                description: responseCode for specific parameter.
+                type: string
+            required:
+              - configParamName
+              - responseCode
+        responseCode:
+          description: Response code for the request
+          type: string
+      required:
+        - appID
+        - sequenceNo
+        - connectionID
+        - data
+        - responseCode
+    opencommchannel:
+      type: object
+      description: >-
+        This schema represents that Service API is used to open a connection
+        with a specified ECU.
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        toolAddress:
+          description: >-
+            For UDS - tool address to be given by client application. For J1939
+            - use claimed address returned by the topic
+            diagstack/request/getclaimedaddress.
+          type: string
+        ecuAddress:
+          description: >-
+            This is the address of target ECU for destination specific outgoing
+            messages In case of J1939 this address will be used as ECU address
+            after address claim process.
+          type: string
+        canFormat:
+          description: 'CAN Format used for a physical address transmit. '
+          type: array
+          items:
+            description: >-
+              Each object in this array consists of an canPhysReqFormat and
+              canRespUSDTFormat.
+            type: object
+            properties:
+              canPhysReqFormat:
+                description: physical address transmit.
+                type: string
+              canRespUSDTFormat:
+                description: physical address transmit.
+                type: string
+            required:
+              - canPhysReqFormat
+              - canRespUSDTFormat
+        resourceName:
+          description: Resource name to be used to open a connection
+          type: string
+      required:
+        - appID
+        - canFormat
+        - ecuAddress
+        - resourceName
+        - sequenceNo
+        - toolAddress
+    openCommchannel:
+      type: object
+      description: The topic on which response of opencommchannel is published
+      properties:
+        appID:
+          description: This parameter is an echo of the appID from the request topic.
+          type: string
+        connectionID:
+          description: >-
+            This parameter is generated by the Service API after successful
+            connection to the ECU successfully. If there is already an open
+            connection for the toolAddress and ecuAddress then existing opened
+            connection is returned.
+          type: string
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string
+        responseCode:
+          description: 64 bit long combined response code.
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - responseCode
+    readpgns:
+      type: object
+      description: >-
+        To send the request by the client application
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        pgnNo:
+          description: List of supported PGNs whose SPNs to be read
+          type: array
+          items:
+            description: List of supported PGNs whose SPNs to be read
+            type: string
+            minItems: 1
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+      required:
+        - appID
+        - connectionID
+        - pgnNo
+        - sequenceNo
+    readPgns:
+      type: object
+      description: The topic on which response is sent for readPgns
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            This parameter is an echo of the parameter connectionID from the
+            request topic opened successfully.
+          type: string
+        data:
+          description: >-
+            This will consist of the value of all available SPNs with the given
+            PGNs.
+          type: array
+          items:
+            description: >-
+              This will consist of the value of all available SPNs with the
+              given PGNs.
+            type: object
+            properties:
+              pgnNo:
+                description: List of supported PGNs whose SPNs to be read
+                type: string
+              rawData:
+                description: original data from ECM
+                type: string
+              decoded:
+                description: boolean value
+                type: boolean
+              responseCode:
+                description: 64 bit long combined response code
+                type: string
+              spn:
+                description: List of supported SPNs to be read
+                type: array   
+                items:
+                  description: >-
+                      This will consist of the value of all available SPNs    with the given PGNs.
+                  type: object
+                  properties:
+                    spnNo:
+                      description: List of supported PGNs whose SPNs to be read
+                      type: string
+                    spnValue:
+                      description: original data from ECM
+                      type: string 
+                    valid:
+                      description: boolean value
+                      type: boolean
+            required:
+              - pgnNo
+              - rawData
+              - decoded
+              - responseCode
+              - spn
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string  
+        responseCode:
+          description: 64 bit long combined response code.
+          type: string        
+      required:
+        - appID
+        - connectionID
+        - data
+        - sequenceNo
+        - responseCode
+    executepgnmonitoring:
+      type: object
+      description: >-
+       executepgnmonitoring service is used to start/stop PGN monitoring
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        operation:
+          description: This parameter is used to request start or stop the 
+                       monitoring
+          type: string
+        sampleRate:
+          description: Requests PGN's at certain rate defined in ms.
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - operation
+        - sampleRate
+    executepgnMonitoring:
+      type: object
+      description: Response is sent for executepgnmonitoring service 
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            This parameter is an echo of the parameter connectionID from the
+            request topic opened successfully.
+          type: string
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string 
+        responseCode:
+          description: 64 bit long combined response code.
+          type: string          
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - responseCode
+    selectmonitoringpgns:
+      type: object
+      description: >-
+       executepgnmonitoring service is used to start/stop PGN monitoring
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        pgnNo:
+          description: List of supported PGNs whose SPNs to be read
+          type: array
+          items:
+            description: List of supported PGNs whose SPNs to be read
+            type: string
+            minItems: 1
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - pgnNo
+    selectMonitoringPgns:
+      type: object
+      description: Response is sent for executepgnmonitoring service 
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            This parameter is an echo of the parameter connectionID from the
+            request topic opened successfully.
+          type: string
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string 
+        responseCode:
+          description: 64 bit long combined response code.
+          type: string          
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - responseCode
+    getupdatedpgnvalues:
+      type: object
+      description: The topic on which response is sent for select monitoring PGN
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            This parameter is an echo of the parameter connectionID from the
+            request topic opened successfully.
+          type: string
+        data:
+          description: >-
+            This will consist of the value of all available SPNs with the given
+            PGNs.
+          type: array
+          items:
+            description: >-
+              This will consist of the value of all available SPNs with the
+              given PGNs.
+            type: object
+            properties:
+              pgnNo:
+                description: List of supported PGNs whose SPNs to be read
+                type: string
+              rawData:
+                description: original data from ECM
+                type: string
+              decoded:
+                description: boolean value
+                type: boolean
+              spn:
+                description: List of supported SPNs to be read
+                type: array   
+                items:
+                  description: >-
+                      This will consist of the value of all available SPNs    with the given PGNs.
+                  type: object
+                  properties:
+                    spnNo:
+                      description: List of supported PGNs whose SPNs to be read
+                      type: string
+                    spnValue:
+                      description: original data from ECM
+                      type: string 
+                    valid:
+                      description: boolean value
+                      type: boolean       
+            required:
+              - pgnNo
+              - rawData
+              - decoded
+              - spn
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string  
+        responseCode:
+          description: 64 bit long combined response code.
+          type: string        
+      required:
+        - appID
+        - connectionID
+        - data
+        - sequenceNo
+        - responseCode
+    readdatabyidentifier:
+      type: object
+      description: >-
+        The topic on which request is sent by the client application with
+        required payload
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        did:
+          description: >-
+            One or more two-byte dataIdentifier (DID) values that identify data
+            record(s) maintained by the ECU and to be read. Multiple read
+            requests will be executed in case of more than one did(s) are
+            provided.
+          type: array
+          items:
+            description: >-
+              One or more two-byte dataIdentifier (DID) values that identify
+              data record(s) maintained by the ECU and to be read. Multiple read
+              requests will be executed in case of more than one did(s) are
+              provided.
+            type: string
+            minItems: 1
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+      required:
+        - appID
+        - connectionID
+        - did
+        - sequenceNo
+    readdatabyIdentifier:
+      type: object
+      description: 'The topic on which response for readdatabyIdentifier is sent '
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            This parameter is an echo of the parameter connectionID from the
+            request topic opened successfully.
+          type: string
+        data:
+          description: >-
+            This parameter used to provide the requested data value. Data
+            received from ECU will be sent as is and no conversion will be done.
+          type: array
+          items:
+            description: >-
+              This parameter used to provide the requested data value. Data
+              received from ECU will be sent as is and no conversion will be
+              done.
+            type: object
+            properties:
+              did:
+                description: List of supported DIDs to be read
+                type: string
+              value:
+                description: original data from ECM
+                type: string
+              responseCode:
+                description: 64 bit long combined response code
+                type: string
+            required:
+              - did
+              - value
+              - responseCode
+        sequenceNo:
+          description: >-
+            This parameter is an echo of the parameter sequenceNo from the
+            request topic
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - data
+        - sequenceNo
+        - responseCode
+    closecommchannel:
+      type: object
+      description: >-
+        The topic on which request is sent by the client application with
+        required payload
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+    closeCommChannel:
+      type: object
+      description: The topic on which response is sent by communication library client
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - responseCode
+    writedatabyidentifier:
+      type: object
+      description: The topic on which response is sent by communication library client
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        data:
+          description: This will consist of the did and values to be written.
+          type: array
+          items:
+            description: This will onsist of the did and values to be written.
+            type: object
+            properties:
+              did:
+                description: string name type did.
+                type: string
+              value:
+                description: did value.
+                type: string
+            required:
+              - did
+              - value
+    writeDatabyIdentifier: 
+      type: object
+      description: The topic on which response is sent by communication library client
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        data:
+          description: This will consist of the did and values to be written.
+          type: array
+          items:
+            description: This will onsist of the did and values to be written.
+            type: object
+            properties:
+              did:
+                description: string name type did.
+                type: string
+              value:
+                description: did value.
+                type: string
+            required:
+              - did
+              - value  
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+    readdtc: 
+      type: object
+      description: The topic on which request is sent to read DTC
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        subFunction:
+          description: This is used to select dtc report type.
+          type: string
+        dtcStatusMask:
+          description: dtc information status is compared with dtcStatusMask for selection
+          type: string  
+    readDtc: 
+      type: object
+      description: The topic on which response is sent for DTC request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        data (report type 1):
+          description: This will consist of dtc response
+          type: array
+          items:
+            description: Data consists of dtc reportType,dtcStatusAvailabilityMask,dtcFormatIdentifier, dtcCount.
+            type: object
+            properties:
+              reportType:
+                description: string name type reportType.
+                type: string
+              dtcStatusAvailabilityMask:
+                description: status availability mask.
+                type: string
+              dtcAndStatusRecord:
+                description: status record.
+                type: string
+            required:
+              - reportType
+              - dtcStatusAvailabilityMask
+              - dtcAndStatusRecord  
+        data (report type 2):
+          description: This will consist of dtc response
+          type: array
+          items:
+            description: Data consists of dtc reportType,dtcStatusAvailabilityMask,dtcFormatIdentifier, dtcCount.
+            type: object
+            properties:
+              reportType:
+                description: string name type reportType.
+                type: string
+              dtcStatusAvailabilityMask:
+                description: status availability mask.
+                type: string
+              dtcFormatIdentifier:
+                description: format of dtc.
+                type: string
+              dtcCount:
+                description: count.
+                type: string
+            required:
+              - reportType
+              - dtcStatusAvailabilityMask
+              - dtcFormatIdentifier
+              - dtcCount
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+    cleardtcs: 
+      type: object
+      description: The topic on which request is sent to clear diagnostic information
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        groupOfDTC:
+          description: This is a 3-Byte value indicating the group of DTCs 
+          type: string
+        memorySelection:
+          description: user defined DTC memory
+          type: string  
+    clearDtcs: 
+      type: object
+      description: The topic on which response is sent for DTC request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: >-
+            Parameter is generated by the Service API after successful
+            connection to the ECU successfully. 
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+    readfreezeframes:
+      type: object
+      description: >-
+        The topic on which request is sent by the client application for reading DTC stored record
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        dtcStoredDataRecordNumber:
+          description: 1 byte value indicating number of specific DTCStoredDataRecord
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - dtcStoredDataRecordNumber
+    readFreezeFrames:
+      type: object
+      description: The topic on which response is sent for the stored record frames request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        dtcStoredDataRecordNumber:
+          description: Parameter is a replica of the parameter dtcStoredDataRecordNumber in the request
+          type: string
+        data:
+          description: Captured data specific to dtcStoredDataRecordNumber
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - dtcStoredDataRecordNumber
+        - data
+        - responseCode
+    routinecontrol:
+      type: object
+      description: >-
+        Routine control is used to execute sequence of steps and obtain relevant result
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFuction is used to select the routine control
+          type: string
+        routineIdentifier:   
+          description: Parameter identifies server local routine 
+          type: string
+        routineControlOptionRecord:   
+          description: Parameter is used to pass data to routine identifier.
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+        - routineIdentifier
+        - routineControlOptionRecord
+    routineControl:
+      type: object
+      description: Response for routine control request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        data:
+          description: Captured data will contain routine info and additional option parameter
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - data
+        - responseCode
+    diagnosticsessioncontrol:
+      type: object
+      description: >-
+        Request to enable different diagnostic seesion
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFuction is used to select the diagnostic session type
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+    diagnosticSessionControl:
+      type: object
+      description: Response for diagnostic seesion control request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFunction is replica of subfunction from the request.
+          type: string
+        data:
+          description: Captured data contains session specific value
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+        - data
+        - responseCode
+    communicationcontrol:
+      type: object
+      description: >-
+        Ability to control communication to the ECU
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFuction is used to describe controlType
+          type: string
+        communicationType:
+          description: Parameter inidicates type of communication to be controlled
+          type: string
+        nodeIdentificationNumberHighByte:
+          description: Parameter is used to identify sub-network
+          type: string
+        nodeIdentificationNumberLowByte:
+          description: Parameter is used to identify node of sub-netowrk
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+        - communicationType
+        - nodeIdentificationNumberHighByte
+        - nodeIdentificationNumberLowByte
+    communicationControl:
+      type: object
+      description: Response for communication control request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFunction is replica of subfunction from the communication control request.
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+        - responseCode
+    sendtesterpresent:
+      type: object
+      description: >-
+        Ability to keep diagnostic service active
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: ZerosubFuction is used to describe that no subFunction value beside the
+                       suppressPosRspMsgIndicationBit is supported by this service
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+    sendTesterPresent:
+      type: object
+      description: Response for send Tester Present request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        subFunction:
+          description: subFunction is replica of subfunction from the sendTesterPresent request.
+          type: string
+        responseCode:
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - subFunction
+        - responseCode
+    requestdownload:
+      type: object
+      description: >-
+        Ability to request download
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        dataFormatIdentifier:
+          description: one byte value with each nibble encoded seperately as compression method and encryption method
+          type: string
+        addressAndLengthFormatIdentifier:
+          description: one byte value defining length of memoryAddress
+          type: string
+        memoryAddress:
+          description: Parameter indicate starting address where data gets written
+          type: string
+        memorySize:
+          description: Indicates the memory size with respect to transmitted data
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - dataFormatIdentifier
+        - addressAndLengthFormatIdentifier
+        - memoryAddress
+        - memorySize
+    requestDownload:
+      type: object
+      description: Response for download request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        lengthFormatIdentifier:
+          description: One byte value for maxNUmberOfBlockLength parameter
+          type: string
+        maxNumberOfBlockLength:
+          description: Parameter indicate data bytes to be included during each transfer request
+          type: string
+        responseCode:   
+          description: 64 bit long combined response code 
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - lengthFormatIdentifier
+        - maxNumberOfBlockLength
+        - responseCode
+    transferdata:
+      type: object
+      description: >-
+        Ability to transfer data to the ECU
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        blockSequenceCounter:
+          description: blockSequenceCounter is used to keep count of data transfer request
+          type: string
+        transferRequestParameterRecord:
+          description: Parameters required for data to be transferred
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - blockSequenceCounter
+        - transferRequestParameterRecord
+    transferData:
+      type: object
+      description: Response for transfer data request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        blockSequenceCounter:
+          description: This is a replica of maxNumberOfBlockLength parameter in the transferdata request
+          type: string
+        transferResponseParameterRecord:
+          description: Parameter might include a checksum
+          type: string
+        responseCode:   
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - blockSequenceCounter
+        - transferResponseParameterRecord
+        - responseCode
+    requesttransferexit:
+      type: object
+      description: >-
+        Ability to terminate data transfer
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        transferRequestParameterRecord:
+          description: Represents data to be transferred
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - blockSequenceCounter
+        - transferRequestParameterRecord
+    requestTransferExit:
+      type: object
+      description: Response for transfer exit request
+      properties:
+        appID:
+          description: Unique application identifier from which the topic is published
+          type: string
+        connectionID:
+          description: Connection ID provided upon successful connection to the ECU
+          type: string
+        sequenceNo:
+          description: Unique sequence number within current running client appID
+          type: string
+        transferResponseParameterRecord:
+          description: Parameter might include parameters required by the client
+          type: string
+        responseCode:   
+          description: 64 bit long combined response code
+          type: string
+      required:
+        - appID
+        - connectionID
+        - sequenceNo
+        - blockSequenceCounter
+        - transferResponseParameterRecord
+        - responseCode
+    MQTTQoSHeader:
+      title: qos
+      description: Quality of Service
+      type: integer
+      format: int32
+      default: 2
+      enum:
+        - 0
+        - 2
+    MQTTRetainHeader:
+      title: retainFlag
+      description: >
+        This flag determines if the message will be saved by the broker for the
+        specified topic as last known good value. New clients that subscribe to
+        that topic will receive the last retained message on that topic
+        instantly after subscribing.
+      type: boolean
+      default: false
